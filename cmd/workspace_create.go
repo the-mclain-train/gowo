@@ -14,18 +14,18 @@ import (
 )
 
 var (
-	projectFlag string
-	pathFlag    string
+	projectFlag   string
+	pathFlag      string
+	workspaceName string
 )
 
 var workspaceCreateCmd = &cobra.Command{
-	Use:   "create <workspaceName>",
+	Use:   "create [flags]",
 	Short: "Create a new Go workspace from a project",
 	Long: `Creates a directory, clones all project repositories into it,
 initializes a Go workspace, and adds all discovered modules.`,
-	Args: cobra.ExactArgs(1),
+	// Args: cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		workspaceName := args[0]
 
 		// 1. Pre-flight checks
 		if err := gws.CheckDependencies(); err != nil {
@@ -46,12 +46,15 @@ initializes a Go workspace, and adds all discovered modules.`,
 		// 3. Determine Workspace Path
 		parentDir := pathFlag
 		if parentDir == "" {
-			parentDir = viper.GetString("workspaces_directory")
+			parentDir = viper.GetString("config.workspaces_directory")
+			fmt.Println("")
 		}
+
 		if parentDir == "" {
 			// If still empty, default to current directory
 			parentDir = "."
 		}
+
 		// Expand tilde
 		if strings.HasPrefix(parentDir, "~") {
 			home, _ := os.UserHomeDir()
@@ -130,8 +133,10 @@ func init() {
 
 	// Required flag for the project name
 	workspaceCreateCmd.Flags().StringVarP(&projectFlag, "project", "p", "", "The name of the project to use for the workspace (required)")
+	workspaceCreateCmd.Flags().StringVarP(&workspaceName, "name", "n", "", "The name of the workspace to create")
 	workspaceCreateCmd.MarkFlagRequired("project")
+	workspaceCreateCmd.MarkFlagRequired("name")
 
 	// Optional flag for the parent directory path
-	workspaceCreateCmd.Flags().StringVar(&pathFlag, "path", "", "The parent directory to create the workspace in (defaults to config or current dir)")
+	workspaceCreateCmd.Flags().StringVarP(&pathFlag, "directory", "d", "", "The parent directory to create the workspace in (defaults to config or current dir)")
 }
