@@ -81,3 +81,28 @@ func InitViper() {
 		}
 	}
 }
+
+// GetProject validates a project exists and sets it to p
+func GetProject(p *Project, key string) error {
+	fullKey := "projects." + key
+	if !viper.IsSet(fullKey) {
+		return fmt.Errorf("project '%s' not found. Use 'gws project ls' to see available projects", key)
+	}
+
+	if err := viper.UnmarshalKey(fullKey, p); err != nil {
+		return fmt.Errorf("could not decode project '%s': %w", key, err)
+	}
+	return nil
+
+}
+
+// FindRepo validates a repo exists in a project and returns the index
+func FindRepo(p *Project, repo string) (int, bool) {
+	rindex := -1
+	for i, r := range p.Repositories {
+		if r == repo {
+			return i, true
+		}
+	}
+	return rindex, false
+}

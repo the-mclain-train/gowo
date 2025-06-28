@@ -32,15 +32,10 @@ initializes a Go workspace, and adds all discovered modules.`,
 			return err
 		}
 
-		// 2. Validate Project
-		projectKey := "projects." + projectFlag
-		if !viper.IsSet(projectKey) {
-			return fmt.Errorf("project '%s' not found. Use 'gws project ls' to see available projects", projectFlag)
-		}
-
+		// 2. Get Project
 		var project config.Project
-		if err := viper.UnmarshalKey(projectKey, &project); err != nil {
-			return fmt.Errorf("could not decode project '%s': %w", projectFlag, err)
+		if err := config.GetProject(&project, projectFlag); err != nil {
+			return err
 		}
 
 		// 3. Determine Workspace Path
