@@ -11,7 +11,7 @@ import (
 const (
 	configName = "config"
 	configType = "yaml"
-	configDir  = ".gorkspace"
+	configDir  = ".config/gowo"
 )
 
 // Project defines the structure for a project with its repositories.
@@ -86,7 +86,7 @@ func InitViper() {
 func GetProject(p *Project, key string) error {
 	fullKey := "projects." + key
 	if !viper.IsSet(fullKey) {
-		return fmt.Errorf("project '%s' not found. Use 'gws project ls' to see available projects", key)
+		return fmt.Errorf("project '%s' not found. Use 'gowo project ls' to see available projects", key)
 	}
 
 	if err := viper.UnmarshalKey(fullKey, p); err != nil {

@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/the-mclain-train/gorkspace/internal/config"
-	gws "github.com/the-mclain-train/gorkspace/internal/gorkspace"
+	"github.com/the-mclain-train/gowo/internal/config"
+	"github.com/the-mclain-train/gowo/internal/gowo"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -28,7 +28,7 @@ initializes a Go workspace, and adds all discovered modules.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		// 1. Pre-flight checks
-		if err := gws.CheckDependencies(); err != nil {
+		if err := gowo.CheckDependencies(); err != nil {
 			return err
 		}
 
@@ -76,7 +76,7 @@ initializes a Go workspace, and adds all discovered modules.`,
 		for _, repoURL := range project.Repositories {
 			// Construct a proper git clone URL
 			fullRepoURL := "https://" + repoURL
-			err := gws.RunCommand(workspacePath, "git", "clone", fullRepoURL)
+			err := gowo.RunCommand(workspacePath, "git", "clone", fullRepoURL)
 			if err != nil {
 				// Clean up created directory on failure
 				os.RemoveAll(workspacePath)
@@ -86,14 +86,14 @@ initializes a Go workspace, and adds all discovered modules.`,
 
 		// 6. Initialize Go Workspace
 		fmt.Println("\nInitializing Go workspace...")
-		if err := gws.RunCommand(workspacePath, "go", "work", "init"); err != nil {
+		if err := gowo.RunCommand(workspacePath, "go", "work", "init"); err != nil {
 			os.RemoveAll(workspacePath)
 			return fmt.Errorf("failed to initialize go workspace: %w", err)
 		}
 
 		// 7. Find and Use Modules
 		fmt.Println("\nScanning for Go modules...")
-		modules, err := gws.FindGoModules(workspacePath)
+		modules, err := gowo.FindGoModules(workspacePath)
 		if err != nil {
 			return fmt.Errorf("failed to find go modules: %w", err)
 		}
@@ -104,14 +104,14 @@ initializes a Go workspace, and adds all discovered modules.`,
 			fmt.Println("Found modules, adding to workspace...")
 			// Create the 'go work use' command with all modules at once
 			args := append([]string{"work", "use"}, modules...)
-			if err := gws.RunCommand(workspacePath, "go", args...); err != nil {
+			if err := gowo.RunCommand(workspacePath, "go", args...); err != nil {
 				os.RemoveAll(workspacePath)
 				return fmt.Errorf("failed to add modules to workspace: %w", err)
 			}
 		}
 
 		// 8. Create Metadata File
-		metaFilePath := filepath.Join(workspacePath, ".gorkspace-meta")
+		metaFilePath := filepath.Join(workspacePath, ".gowo-meta")
 		metaContent := []byte(fmt.Sprintf("project: %s\n", projectFlag))
 		if err := os.WriteFile(metaFilePath, metaContent, 0644); err != nil {
 			fmt.Printf("Warning: could not write metadata file: %v\n", err)

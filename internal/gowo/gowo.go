@@ -1,4 +1,4 @@
-package gorkspace
+package gowo
 
 import (
 	"fmt"

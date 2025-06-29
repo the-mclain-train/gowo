@@ -16,7 +16,7 @@ var projectLsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		projects := viper.GetStringMap("projects")
 		if len(projects) == 0 {
-			fmt.Println("No projects found. Use 'gorkspace project add' to create one.")
+			fmt.Println("No projects found. Use 'gowo project add' to create one.")
 			return
 		}
 

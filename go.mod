@@ -1,4 +1,4 @@
-module github.com/the-mclain-train/gorkspace
+module github.com/the-mclain-train/gowo
 
 go 1.24.4
 

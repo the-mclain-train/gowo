@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/the-mclain-train/gorkspace/internal/config"
+	"github.com/the-mclain-train/gowo/internal/config"
 
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "gorkspace",
-	Short: "gorkspace is a CLI tool to manage Go workspaces based on project definitions.",
+	Use:   "gowo",
+	Short: "gowo is a CLI tool to manage Go workspaces based on project definitions.",
 	Long: `A fast and flexible CLI for Go developers to manage complex Go workspaces.
-Define projects as collections of repositories and let gorkspace handle the setup.`,
+Define projects as collections of repositories and let gowo handle the setup.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/the-mclain-train/gorkspace/internal/config"
+	"github.com/the-mclain-train/gowo/internal/config"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

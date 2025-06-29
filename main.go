@@ -1,6 +1,6 @@
 package main
 
-import "github.com/the-mclain-train/gorkspace/cmd"
+import "github.com/the-mclain-train/gowo/cmd"
 
 func main() {
 	cmd.Execute()
